@@ -1,0 +1,7 @@
+{% extends "email/email_base.html" %}
+{% block content %}
+以下のリンクをクリックして頂くと、転送先メールアドレスの認証が完了します。
+{{ auth_url }}
+
+※本リンクの有効期限は24時間です。
+{% endblock %}

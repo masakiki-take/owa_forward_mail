@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="{% static 'img/owa_forward_mail.ico' %}">
+    <link rel="stylesheet"  href="{% static 'bootstrap/css/bootstrap.min.css' %}"></script>
+    <link rel="stylesheet"  href="{% static 'css/style.css' %}"></script>
+    {% block css %}{% endblock %}
+    <script src="{% static 'bootstrap/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">$(function(){setTimeout("$('.messages').fadeOut('slow')", 3000)})</script>
+    {% block js %}{% endblock %}
+  </head>
+  <body>
+    {% include '_layout/_header.html' %}
+    {% if messages %}
+      {% for message in messages %}
+        <div {% if message.tags %} class="messages bg-{{ message.tags }}"{% endif %}>{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="contents">
+    {% block content %}{% endblock %}
+    </div>
+    <div class="footer">
+    {% block footer %}{% endblock %}
+    </div>
+    <br>
+  </body>
+</html>

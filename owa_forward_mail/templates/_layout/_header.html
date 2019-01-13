@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-main">
+  <a class="navbar-brand mr-auto" href="../"><img src="{% static 'img/menu/paper-plane.svg' %}" class="header-icon">OWAメール転送</a>
+  {% if user.is_authenticated %}
+  <button class="navbar-toggler border-light" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item{% if current == 'dashboard' %} active{% endif %}">
+        <a class="nav-link menu-link" href="{% url 'dashboard' %}"><img src="{% static 'img/menu/home.svg' %}" class="menu-icon">ホーム</a>
+      </li>
+      <li class="nav-item{% if current == 'account' %} active{% endif %}">
+        <a class="nav-link menu-link" href="{% url 'account' %}"><img src="{% static 'img/menu/account.svg' %}" class="menu-icon">アカウント</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}"><img src="{% static 'img/menu/logout.svg' %}" class="menu-icon">ログアウト</a>
+      </li>
+    </ul>
+  </div>
+  {% elif is_index %}
+  <a class="login-button" href="{% url 'login' %}">ログイン</a>
+  {% endif %}
+</nav>

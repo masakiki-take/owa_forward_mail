@@ -1,0 +1,34 @@
+.header-icon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin-right: 16px;
+}
+
+.menu-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.menu-link {
+  margin-right: 20px;
+}
+
+.login-button {
+  display: inline-block;
+  padding: 0.3em 0.6em;
+  text-decoration: none !important;
+  font-weight: bold;
+  color:white;
+  border: solid 2px white;
+  border-radius: 10px;
+  transition: .4s;
+}
+
+.login-button:hover {
+  background: white;
+  color: #000033;
+  border: solid 2px #000033;
+}

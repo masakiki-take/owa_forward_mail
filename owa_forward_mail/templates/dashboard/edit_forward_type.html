@@ -1,0 +1,42 @@
+{% extends "_layout/_base.html" %}
+{% load staticfiles %}
+{% block title %}転送対象・未読フラグ設定{% endblock %}
+
+{% block content %}
+<div class="title">転送対象・未読フラグ設定</div>
+<form action="./" method="POST">
+  <div class="card">
+    <div class="card-body">
+      {% csrf_token %}
+      <div class="text-left">
+        <div class="font-weight-bold">転送対象</div>
+        <input type="radio" name="target" value="{{ constant.FORWARD_TARGET_COUNT }}" id="id_target_0" {% if forward_type.target == constant.FORWARD_TARGET_COUNT %} checked{% endif %}>
+        <label for="id_target_0">件数</label>
+        <p class="text-secondary">新着メールの件数のみ通知します</p>
+        <input type="radio" name="target" value="{{ constant.FORWARD_TARGET_SUBJECT }}" id="id_target_1" {% if forward_type.target == constant.FORWARD_TARGET_SUBJECT %} checked{% endif %}>
+        <label for="id_target_1">差出人と件名</label>
+        <p class="text-secondary">新着メールの差出人と件名の一覧を通知します</p>
+        <input type="radio" name="target" value="{{ constant.FORWARD_TARGET_MAIL }}" id="id_target_2" {% if forward_type.target == constant.FORWARD_TARGET_MAIL %} checked{% endif %}>
+        <label for="id_target_2">全文</label>
+        <p class="text-secondary">新着メールをそのまま転送します</p>
+      </div>
+      {% if errormessage %}
+      <p class="text-danger">転送対象を選択して下さい</p>
+      {% endif %}
+      <hr>
+      <div class="text-left">
+        <div class="font-weight-bold">未読フラグ</div>
+        <input type="checkbox" name="keep_unread" id="id_keep_unread"{% if forward_type.keep_unread %} checked="True"{% endif %}>
+        <label for="id_keep_unread">転送後も未開封のまま残す</label>
+        <p class="text-secondary">チェックを外すと転送後のメールが開封済みになります</p>
+      </div>
+      <hr>
+      <input type="submit" class="btn btn-primary" value="保存"/>
+      <input type="submit" name="stop" class="btn btn-danger" value="配信停止"/>
+    </div>
+  </div>
+</form>
+{% endblock %}
+{% block footer %}
+<a href="{% url 'dashboard' %}">ホームに戻る</a>
+{% endblock %}

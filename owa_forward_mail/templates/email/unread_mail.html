@@ -1,0 +1,9 @@
+{% extends "email/email_base.html" %}
+{% block content %}
+新着メールが {{ count }} 件ありました。
+{% for mail_info in mail_infos %}
+------------------------------
+  差出人: {{ mail_info.from }}
+  受信日時: {{ mail_info.received_at }}
+  件名: {{ mail_info.subject }}
+{% endfor %}{% endblock %}

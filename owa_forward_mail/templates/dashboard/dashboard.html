@@ -1,0 +1,85 @@
+{% extends "_layout/_base.html" %}
+{% load staticfiles %}
+{% block title %}ホーム{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <div class="card-title">
+      <img class="dashboard-icon" src="{% static 'img/dashboard/email.svg' %}"><a class="align-middle" href="{% url 'edit_email' %}">転送先メールアドレス登録</a>
+    </div>
+    {% if forward_email.mail_auth == constant.MAIL_AUTH_STATUS_INIT %}
+    <span class="text-danger">未設定</span>
+    {% elif forward_email.mail_auth == constant.MAIL_AUTH_STATUS_SENT %}
+    <form class="resend" action="{% url 'resend' %}" method="POST">
+      {% csrf_token %}
+      <span class="text-danger">メール認証待ち</span>
+      <button class="btn btn-dark" type="submit">再送信</button>
+    </form>
+    {% elif forward_email.mail_auth == constant.MAIL_AUTH_STATUS_DONE %}
+    <span>認証済み</span>
+    {% endif %}
+  </div>
+</div>
+<br>
+<div class="card">
+  <div class="card-body">
+    <div class="card-title">
+      {% if forward_email.mail_auth != constant.MAIL_AUTH_STATUS_DONE %}
+      <img class="dashboard-icon" src="{% static 'img/dashboard/setting_inactive.svg' %}"><span class="text-secondary">転送対象・未読フラグ設定</span>
+      {% else %}
+      <img class="dashboard-icon" src="{% static 'img/dashboard/setting.svg' %}"><a class="align-middle" href="{% url 'edit_forward_type' %}">転送対象・未読フラグ設定</a>
+      {% endif %}
+    </div>
+    {% if forward_email.mail_auth != constant.MAIL_AUTH_STATUS_DONE %}
+    <span class="text-danger">メール認証が完了していません</span>
+    {% else %}
+      {% if forward_type.target == constant.FORWARD_TARGET_STOP %}
+      <span class="text-danger">配信停止</span>
+      {% elif forward_type.target == constant.FORWARD_TARGET_COUNT %}
+      <span>転送対象：件数</span>
+      {% elif forward_type.target == constant.FORWARD_TARGET_SUBJECT %}
+      <span>転送対象：差出人と件名</span>
+      {% elif forward_type.target == constant.FORWARD_TARGET_MAIL %}
+      <span>転送対象：全文</span>
+      {% endif %}
+      {% if forward_type.target != constant.FORWARD_TARGET_STOP %}
+      <br>
+      <span>未読フラグ：{% if forward_type.keep_unread %}残す{% else %}残さない{% endif %}</span>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+<br>
+<div class="card">
+  <div class="card-body">
+    <div class="card-title">
+      {% if forward_email.mail_auth != constant.MAIL_AUTH_STATUS_DONE %}
+      <img class="dashboard-icon" src="{% static 'img/dashboard/history_inactive.svg' %}"><span class="text-secondary">転送履歴（直近100件のみ）</span>
+      {% else %}
+      <img class="dashboard-icon" src="{% static 'img/dashboard/history.svg' %}"><span>転送履歴（直近100件のみ）</span>
+      {% endif %}
+    </div>
+    {% if not forward_histories %}
+    <span class="text-danger">転送履歴がありません</span>
+    {% else %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">日時</th>
+          <th scope="col">ステータス</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for forward_history in forward_histories %}
+        <tr>
+          <td>{{ forward_history.created_at }}</td>
+          <td{% if forward_history.status != constant.FORWARD_STATUS_VALID %} class="text-danger"{% elif forward_history.new_mail_count == 0 %} class="text-secondary"{% endif %}>{{ forward_history.status_display }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

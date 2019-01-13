@@ -1,0 +1,49 @@
+{% extends "_layout/_base.html" %}
+{% load staticfiles %}
+{% block title %}OWAメール転送{% endblock %}
+
+{% block content %}
+このシステムは、転送設定を無効化されているOWA(Outlook Web Access)の受信メールを監視して<br>
+新着メールを個人のアドレスに転送することで、リアルタイムな業務連絡を実現するものです。<br>
+<br>
+<p class="text-danger">※多くの組織では情報漏洩を考慮して転送設定を無効化しているため、ご利用は自己責任でお願い致します。</p><br>
+<h3>ご利用方法</h3>
+<div class="step">
+  <p class="step-number text-main">STEP 1</p>
+  <hr class="bg-main">
+  <div class="step-title">
+    <img class="step-icon" src="{% static 'img/step/account.svg' %}"></img>
+    <span>OWAアカウントでログイン</span>
+  </div>
+  <div class="text-secondary">
+    OWAでご利用のメールアドレス、ユーザ名、パスワードを入力してログインして下さい
+  </div>
+  <p class="step-number text-main">STEP 2</p>
+  <hr class="bg-main">
+  <div class="step-title">
+    <img class="step-icon" src="{% static 'img/step/email.svg' %}"></img>
+    <span>転送先メールアドレス認証</span>
+  </div>
+  <div class="text-secondary">
+    転送先メールアドレスを登録すると認証メールが送信されるので、リンクよりメール認証を完了させて下さい
+  </div>
+  <p class="step-number text-main">STEP 3</p>
+  <hr class="bg-main">
+  <div class="step-title">
+    <img class="step-icon" src="{% static 'img/step/settings.svg' %}"></img>
+    <span>転送対象・未読フラグ設定</span>
+  </div>
+  <div class="text-secondary">
+    転送対象(件数/差出人と件名/全文)の選択と、転送後に未開封のまま残すかどうかを設定して下さい
+  </div>
+  <p class="step-number text-main">STEP 4</p>
+  <hr class="bg-main">
+  <div class="step-title">
+    <img class="step-icon" src="{% static 'img/step/checked.svg' %}"></img>
+    <span>OWAメールの自動転送開始</span>
+  </div>
+  <div class="text-secondary">
+    毎日6:00～24:00の間に受信したメールが自動で転送されるようになります
+  </div>
+</div>
+{% endblock %}

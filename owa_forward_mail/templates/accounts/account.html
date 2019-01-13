@@ -1,0 +1,41 @@
+{% extends "_layout/_base.html" %}
+{% load staticfiles %}
+{% block title %}アカウント情報{% endblock %}
+
+{% block content %}
+<div class="title">アカウント情報</div>
+<div class="card">
+  <div class="card-body">
+    <div class="form-group">
+      <div class="form-label">サーバーアドレス</div>
+      {{ form.server }}
+    </div>
+    <div class="form-group">
+      <div class="form-label">OWAメールアドレス</div>
+      {{ form.email }}
+    </div>
+    <div class="form-group">
+      <div class="form-label">OWAユーザー名</div>
+      {{ form.username }}
+    </div>
+    <div class="form-group">
+      <div class="form-label">OWAパスワード</div>
+      <input type="text" name="password" value="非表示" class="form-control text-danger" readonly="readonly">
+    </div>
+    <div class="form-group">
+      <div class="form-label">転送先メールアドレス</div>
+      {% if mail_auth == constant.MAIL_AUTH_STATUS_INIT %}
+      <input type="text" name="forward_email" value="未設定" class="form-control text-danger" readonly="readonly">
+      {% else %}
+      {{ form.forward_email }}
+      {% endif %}
+      {% if mail_auth == constant.MAIL_AUTH_STATUS_SENT %}
+      <div class="text-danger text-left">メール認証待ち</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block footer %}
+<a href="{% url 'dashboard' %}">ホームに戻る</a>
+{% endblock %}

@@ -1,0 +1,26 @@
+.step-number {
+  margin-top:20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.step-icon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
+}
+
+.step-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}
+
+.step {
+  max-width: 800px;
+  margin-right: auto;
+  margin-left: auto;
+}
