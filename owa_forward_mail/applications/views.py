@@ -64,12 +64,11 @@ class RunTaskView(APIView):
                 last_time = None
 
             try:
-                owa_account = OwaAccount(
+                OwaAccount(
                     server=user.server,
                     email=user.email,
                     username=user.plane_username,
-                    password=user.plane_password,
-                    forward_email=forward_email.email
+                    password=user.plane_password
                 )
             except UnauthorizedError:
                 ForwardHistory.objects.create(user=user, status=ForwardStatus.get_values('auth_failure'))
@@ -81,6 +80,15 @@ class RunTaskView(APIView):
                 email = SendEmail(forward_email.email, title, template)
                 email.send()
                 continue
+
+            owa_account = OwaAccount(
+                server=user.server,
+                email=user.email,
+                username=user.plane_username,
+                password=user.plane_password,
+                forward_email=forward_email.email,
+                enableFaultTolerance=True
+            )
 
             try:
                 if forward_type.target == ForwardTarget.get_values('count'):

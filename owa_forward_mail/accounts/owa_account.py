@@ -1,20 +1,28 @@
 import pytz
 
 from django.template import loader
-from exchangelib import Account, Configuration, DELEGATE, EWSDateTime, Message, ServiceAccount
+from exchangelib import Account, Configuration, Credentials, DELEGATE, EWSDateTime, Message, ServiceAccount
 from exchangelib.errors import ErrorItemNotFound, ErrorNonExistentMailbox
 
 
 class OwaAccount():
-    def __init__(self, email, server, username, password, forward_email=None):
+    def __init__(self, email, server, username, password, forward_email=None, enableFaultTolerance=False):
+        if enableFaultTolerance:
+            credentials = ServiceAccount(
+                username=username,
+                password=password
+            )
+        else:
+            credentials = Credentials(
+                username=username,
+                password=password
+            )
+
         self.account = Account(
             primary_smtp_address=email,
             config=Configuration(
                 server=server,
-                credentials=ServiceAccount(
-                    username=username,
-                    password=password
-                ),
+                credentials=credentials,
             ),
             autodiscover=False,
             access_type=DELEGATE,
