@@ -55,7 +55,11 @@ class RunTaskView(APIView):
             if histories:
                 delete_ids = [history.id for history in histories[99:]]
                 ForwardHistory.objects.filter(id__in=delete_ids).delete()
-                last_time = histories.latest('created_at').created_at
+                last_time = (
+                    ForwardHistory.objects
+                                  .filter(user=user, status=ForwardStatus.get_values('valid'))
+                                  .latest('created_at').created_at
+                )
             else:
                 last_time = None
 
