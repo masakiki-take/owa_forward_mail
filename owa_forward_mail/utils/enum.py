@@ -17,7 +17,7 @@ class ForwardTarget(Enum):
     stop = (Constant.FORWARD_TARGET_STOP, '配信停止')
     count = (Constant.FORWARD_TARGET_COUNT, '件数')
     subject = (Constant.FORWARD_TARGET_SUBJECT, '差出人と件名')
-    mail = (Constant.FORWARD_TARGET_MAIL, 'メール転送')
+    mail = (Constant.FORWARD_TARGET_MAIL, '全文')
 
     @classmethod
     def get_values(cls, member):

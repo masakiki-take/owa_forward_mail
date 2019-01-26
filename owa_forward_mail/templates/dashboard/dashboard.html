@@ -36,15 +36,8 @@
     {% else %}
       {% if forward_type.target == constant.FORWARD_TARGET_STOP %}
       <span class="text-danger">配信停止</span>
-      {% elif forward_type.target == constant.FORWARD_TARGET_COUNT %}
-      <span>転送対象：件数</span>
-      {% elif forward_type.target == constant.FORWARD_TARGET_SUBJECT %}
-      <span>転送対象：差出人と件名</span>
-      {% elif forward_type.target == constant.FORWARD_TARGET_MAIL %}
-      <span>転送対象：全文</span>
-      {% endif %}
-      {% if forward_type.target != constant.FORWARD_TARGET_STOP %}
-      <br>
+      {% else %}
+      <span>転送対象：{{ forward_type.get_target_display }}</span><br>
       <span>未読フラグ：{% if forward_type.keep_unread %}残す{% else %}残さない{% endif %}</span>
       {% endif %}
     {% endif %}
