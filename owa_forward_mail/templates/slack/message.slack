@@ -1,0 +1,6 @@
+{% extends django_slack %}
+
+{% block text %}
+{{ now }} - {% if level != 'INFO' %} `{% endif %}{{ level }}{% if level != 'INFO' %}` {% endif %} - {% if user %}{{ user.id|stringformat:"02d" }}{% else %}SYSTEM{% endif %} - {{ title }} {% if channel %}<!channel>{% endif %}
+{% if extra_message %}```{{ extra_message|safe }}```{% endif %}
+{% endblock %}
