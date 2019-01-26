@@ -3,7 +3,6 @@ from django.contrib import admin
 
 from . import views
 from .accounts import views as accounts_views
-from .applications import views as applications_view
 from .dashboard import views as dashboard_views
 
 
@@ -17,6 +16,5 @@ urlpatterns = [
     url(r'^email/confirm/(?P<token>[^/]+)/$', accounts_views.EmailConfirmationView.as_view(), name='confirm_email'),
     url(r'^dashboard/edit_forward_type/$', dashboard_views.EditForwardTypeView.as_view(), name='edit_forward_type'),
     url(r'^dashboard/resend/$', dashboard_views.ResendEmailView.as_view(), name='resend'),
-    url(r'^run_task/(?P<auth_key>[^/]+)/$', applications_view.RunTaskView.as_view()),
     url(r'^admin/', admin.site.urls),
 ]
