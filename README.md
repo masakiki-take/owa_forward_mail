@@ -19,7 +19,10 @@ Postgresqlで下記ユーザーとDBを作成
 PERSONAL_CRYPTO_KEY=''    # 個人情報暗号化キー
 EMAIL_AUTH_CRYPTO_KEY=''  # メール認証トークン暗号化キー
 SECRET_KEY=''             # CSRF_TOKEN などセキュリティキーとして利用される定数
-TASK_EXE_AUTH_KEY=''      # タスク実行用認証キー
+SLACK_TOKEN               # Slack APIトークン
+SLACK_CHANNEL             # Slackチャンネル名 (ログ通知用)
+SLACK_USERNAME            # Slack BOTユーザー名
+SLACK_ICON_EMOJI          # Slack BOTアイコン絵文字
 ```
 
 ### pip install
@@ -38,7 +41,7 @@ $ python manage.py migrate --settings=owa_forward_mail.settings.development
 $ python manage.py runserver 127.0.0.1:5500 --settings=owa_forward_mail.settings.development
 ```
 
-### 定期実行
-下記APIを定期実行して、メール転送タスクを実行する
-
-https://127.0.0.1:5500/run_task/{ TASK_EXE_AUTH_KEY }/
+### タスク実行
+```
+$ python manage.py runtask --settings=owa_forward_mail.settings.development
+```

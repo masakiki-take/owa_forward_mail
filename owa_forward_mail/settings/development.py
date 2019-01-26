@@ -1,9 +1,10 @@
 from .base import *  # NOQA
 
 SECRET_KEY = 'dummy'
-TASK_EXE_AUTH_KEY = 'dummy'
 PERSONAL_CRYPTO_KEY = 'WlAzb2t0VWViU1ZlSnhuMXo2VE0yTzh5Z3pQV096TDg='  # 32byte to Base64
 EMAIL_AUTH_CRYPTO_KEY = 'bDVYUXlDenNVMjEzYnlvV1J2U2NqdzAyNWwzT0NCNXc='  # 32byte to Base64
+
+SLACK_BACKEND = 'django_slack.backends.UrllibBackend'
 
 DATABASES = {
     'default': {

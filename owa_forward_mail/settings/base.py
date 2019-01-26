@@ -4,9 +4,16 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
-TASK_EXE_AUTH_KEY = os.environ.get('TASK_EXE_AUTH_KEY')
 PERSONAL_CRYPTO_KEY = os.environ.get('PERSONAL_CRYPTO_KEY')
 EMAIL_AUTH_CRYPTO_KEY = os.environ.get('EMAIL_AUTH_CRYPTO_KEY')
+
+SLACK_TOKEN = os.environ.get('SLACK_TOKEN')
+SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL')
+SLACK_USERNAME = os.environ.get('SLACK_USERNAME')
+SLACK_ICON_EMOJI = os.environ.get('SLACK_ICON_EMOJI')
+SLACK_FAIL_SILENTLY = True
+
+OPERATING_HOURS = [h for h in range(6, 25)]
 
 DEBUG = False
 
@@ -18,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_slack',
     'owa_forward_mail',
     'owa_forward_mail.accounts',
     'owa_forward_mail.applications',
