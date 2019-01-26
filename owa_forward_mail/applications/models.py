@@ -21,33 +21,21 @@ class ForwardHistory(CreateAndUpdateDateTimeMixin):
     """転送履歴"""
     FORWARD_STATUS = tuple([x.value for x in ForwardStatus])
 
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=FORWARD_STATUS, default=ForwardStatus.get_values('init'))
     new_mail_count = models.IntegerField(default=0)
-    message = models.TextField(default='')
 
     @property
     def status_display(self):
-        if self.status == ForwardStatus.get_values('init'):
-            return '未転送'
-        elif self.status == ForwardStatus.get_values('valid'):
+        if self.status == ForwardStatus.get_values('valid'):
             if self.new_mail_count:
                 return f'新着 {self.new_mail_count} 件'
             else:
                 return '新着なし'
-        elif self.status == ForwardStatus.get_values('auth_failure'):
-            return '認証失敗'
-        elif self.status == ForwardStatus.get_values('invalid'):
-            return '転送失敗'
+        else:
+            return self.get_status_display()
 
     class Meta:
         db_table = 'forward_history'
         ordering = ['-created_at']
-
-
-class TaskStatus(CreateAndUpdateDateTimeMixin):
-    """タスクステータス"""
-    is_running = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = 'task_status'
