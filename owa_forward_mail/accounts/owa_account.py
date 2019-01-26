@@ -1,11 +1,22 @@
 import pytz
 
 from django.template import loader
-from exchangelib import Account, Configuration, Credentials, DELEGATE, EWSDateTime, Message, ServiceAccount
+from exchangelib import (
+    Account,
+    Configuration,
+    Credentials,
+    DELEGATE,
+    EWSDateTime,
+    Message,
+    ServiceAccount
+)
+from exchangelib.items import BaseMeetingItem
 from exchangelib.errors import ErrorItemNotFound, ErrorNonExistentMailbox
 
 
 class OwaAccount():
+    WEEKS = ["月", "火", "水", "木", "金", "土", "日"]
+
     def __init__(self, email, server, username, password, forward_email=None, enableFaultTolerance=False):
         if enableFaultTolerance:
             credentials = ServiceAccount(
@@ -57,8 +68,6 @@ class OwaAccount():
         Returns:
             list(dict): メール情報リスト
         """
-        WEEKS = ["月", "火", "水", "木", "金", "土", "日"]
-
         mail_infos = []
         for mail in mails:
             if mail.author.name == mail.author.email_address:
@@ -68,7 +77,7 @@ class OwaAccount():
 
             received_at = mail.datetime_received.astimezone(pytz.timezone('Asia/Tokyo'))
             received_at_str = received_at.strftime('%Y/%m/%d %H:%M:%S')
-            received_at_str = received_at_str.replace(' ', f'({WEEKS[received_at.weekday()]}) ')
+            received_at_str = received_at_str.replace(' ', f'({self.WEEKS[received_at.weekday()]}) ')
 
             mail_infos.append({
                 'id': mail.id,
@@ -103,12 +112,31 @@ class OwaAccount():
         Args:
             mail_id(str): メール識別ID (Message.id)
         """
+
         mail = self.account.inbox.get(id=mail_id)
-        mail.forward(
-            subject=f'【OWAメール転送システム】Fwd: {mail.subject}',
-            body='このメールはシステムにより自動転送されたものです。',
-            to_recipients=[self.forward_email]
-        )
+        if isinstance(mail, Message):
+            mail.forward(
+                subject=f'【OWAメール転送システム】Fwd: {mail.subject}',
+                body='このメールはシステムにより自動転送されたものです。',
+                to_recipients=[self.forward_email]
+            )
+        elif isinstance(mail, BaseMeetingItem):
+            received_at = mail.datetime_received.astimezone(pytz.timezone('Asia/Tokyo'))
+            received_at_str = received_at.strftime('%Y/%m/%d %H:%M:%S')
+            received_at_str = received_at_str.replace(' ', f'({self.WEEKS[received_at.weekday()]}) ')
+
+            self._send_email(
+                subject='【OWAメール転送システム】新着メール通知 (ミーティング)',
+                template='email/unread_mail.html',
+                extra_context={
+                    'count': 1,
+                    'mail_infos': [{
+                        'received_at': received_at_str,
+                        'from': mail.author,
+                        'subject': mail.subject,
+                    }],
+                }
+            )
 
     def _set_read_flag(self, mail_id, value):
         """未読フラグを設定
@@ -225,5 +253,8 @@ class OwaAccount():
             if keep_unread:
                 # OWAから転送すると自動で開封済みになるため、転送後未開封に設定
                 self._set_read_flag(mail_id, False)
+            else:
+                # 会議招待メールは転送できないため、手動で開封済みに設定
+                self._set_read_flag(mail_id, True)
 
         return len(mail_ids)
