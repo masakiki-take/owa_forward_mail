@@ -54,6 +54,9 @@ class User(AbstractBaseUser, CreateAndUpdateDateTimeMixin, PermissionsMixin):
     def plane_password(self):
         return Cipher(settings.PERSONAL_CRYPTO_KEY).decrypt(self.password)
 
+    class Meta:
+        ordering = ['id']
+
 
 class ForwardEmail(CreateAndUpdateDateTimeMixin):
     """転送先メールアドレス"""
